@@ -1,43 +1,60 @@
-#ifndef PORTS_H_
-#define PORTS_H_
+#include <msp430.h>
+#include "ports.h"
 
-// ================== PORT 1 ==================
-#define RED_LED            BIT0   // P1.0
-#define IR_SENSOR_LEFT     BIT2   // P1.2 (A2)
-#define IR_SENSOR_RIGHT    BIT3   // P1.3 (A3)
-#define THUMBWHEEL         BIT5   // P1.5 (A5)
-#define UART0_RX           BIT6   // P1.6
-#define UART0_TX           BIT7   // P1.7
+void Init_Ports(void) {
+    // --- PORT 1 ---
+    P1OUT &= ~RED_LED;
+    P1DIR |= RED_LED;
 
-// ================== PORT 2 ==================
-#define IR_EMITTER         BIT2   // P2.2
-#define SW2                BIT3   // P2.3
-#define IOT_RED_LED        BIT4   // P2.4
-#define DAC_ENABLE         BIT5   // P2.5
+    // ADC Inputs: IR L, IR R, Thumbwheel
+    P1SEL0 |= IR_SENSOR_LEFT | IR_SENSOR_RIGHT | THUMBWHEEL;
+    P1SEL1 |= IR_SENSOR_LEFT | IR_SENSOR_RIGHT | THUMBWHEEL;
 
-// ================== PORT 3 ==================
-#define IOT_GRN_LED        BIT6   // P3.6
-#define IOT_PWR_EN         BIT7   // P3.7
+    // UART0 TX/RX for PC Debug
+    P1SEL0 |= UART0_TX | UART0_RX;
+    P1SEL1 &= ~(UART0_TX | UART0_RX);
 
-// ================== PORT 4 ==================
-#define LCD_RESET          BIT0   // P4.0
-#define SW1                BIT1   // P4.1
-#define UART1_RX           BIT2   // P4.2
-#define UART1_TX           BIT3   // P4.3
-#define LCD_CS             BIT4   // P4.4
-#define LCD_SCK            BIT5   // P4.5
-#define LCD_SIMO           BIT6   // P4.6
-#define LCD_SOMI           BIT7   // P4.7
+    // --- PORT 2 ---
+    P2OUT &= ~IR_EMITTER;
+    P2DIR |= IR_EMITTER;
 
-// ================== PORT 6 ==================
-#define LCD_BACKLIGHT      BIT0   // P6.0
-#define R_FORWARD          BIT1   // P6.1 - TB3.1
-#define R_REVERSE          BIT2   // P6.2 - TB3.2
-#define L_FORWARD          BIT3   // P6.3 - TB3.3
-#define L_REVERSE          BIT4   // P6.4 - TB3.4
-#define GRN_LED            BIT6   // P6.6
+    P2OUT &= ~IOT_RED_LED;
+    P2DIR |= IOT_RED_LED;
 
-void Init_Ports(void);
+    P2OUT |= DAC_ENABLE;    // Power to DAC on
+    P2DIR |= DAC_ENABLE;
 
-#endif // PORTS_H_
+    P2DIR &= ~SW2;          // Optional input
+    P2REN |= SW2;
+    P2OUT |= SW2;
 
+    // --- PORT 3 ---
+    P3OUT &= ~(IOT_GRN_LED | IOT_PWR_EN);
+    P3DIR |= IOT_GRN_LED | IOT_PWR_EN;
+
+    // --- PORT 4 ---
+    P4OUT &= ~(LCD_RESET | LCD_CS);
+    P4DIR |= LCD_RESET | LCD_CS;
+
+    P4DIR &= ~SW1;
+    P4REN |= SW1;
+    P4OUT |= SW1;
+    P4IES |= SW1;       // High to low
+    P4IFG &= ~SW1;
+    P4IE  |= SW1;
+
+    // UART1 & LCD SPI Setup
+    P4SEL0 |= UART1_TX | UART1_RX | LCD_SCK | LCD_SIMO | LCD_SOMI;
+    P4SEL1 &= ~(UART1_TX | UART1_RX | LCD_SCK | LCD_SIMO | LCD_SOMI);
+
+    // --- PORT 6 ---
+    P6OUT |= LCD_BACKLIGHT;
+    P6DIR |= LCD_BACKLIGHT;
+
+    // Motor PWM Direction Pins (All OFF initially)
+    P6OUT &= ~(R_FORWARD | R_REVERSE | L_FORWARD | L_REVERSE);
+    P6DIR |= (R_FORWARD | R_REVERSE | L_FORWARD | L_REVERSE);
+
+    P6OUT &= ~GRN_LED;
+    P6DIR |= GRN_LED;
+}
