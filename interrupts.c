@@ -1,13 +1,14 @@
 #include "msp430.h"
 #include "macros.h"
 #include "interrupts.h"
+#include "timers.h"
 
-// TimerB0 CCR0 ISR
 #pragma vector = TIMER0_B0_VECTOR
 __interrupt void Timer0_B0_ISR(void) {
-  TB0CCR0 += 25000; // Placeholder interval logic
-  // TODO: add logic later when we need it
+    TB0CCR0 += 8000;      // Schedule next if repeating (can remove if one-shot)
+    timer_done = 1;
 }
+
 
 // TimerB0 CCR1–CCR2 + overflow ISR
 #pragma vector = TIMER0_B1_VECTOR
