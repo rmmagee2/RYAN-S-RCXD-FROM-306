@@ -17,3 +17,8 @@ if(UART_CheckForCommand(UART_PC)) {
 Start_ADC(ADC_IR_LEFT);
 // wait or flag in ISR sets "ready" flag
 unsigned int leftIR = adc_values[ADC_IR_LEFT];
+
+Drive_Forward(FULL_SPEED);
+__delay_cycles(800000); // delay 0.1s
+Turn_Left(HALF_SPEED);
+Stop_Motors();
