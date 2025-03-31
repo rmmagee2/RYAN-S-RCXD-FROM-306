@@ -1,17 +1,19 @@
+#include <msp430.h>
+#include "timers.h"
+
+volatile uint8_t timer_done = 0;
+
 void Init_Timer_B0(void) {
-    TB0CTL = TBSSEL__SMCLK | MC__CONTINUOUS | TBCLR; // SMCLK, continuous, reset
-
-    TB0CCTL0 = CCIE;                    // Enable CCR0 interrupt
-    TB0CCR0 = 8000;                     // ~1ms interrupt (8000 clocks @ 8MHz)
-
-    TB0CCTL1 = CCIE;
-    TB0CCR1 = 16000;                    // Optional 2ms event or ADC timing
-
-    TB0CCTL2 = CCIE;
-    TB0CCR2 = 32000;                    // Optional 4ms event
-
-    TB0CTL |= TBIE;                     // Enable overflow interrupt (optional)
+    TB0CTL = TBSSEL__SMCLK | MC__CONTINUOUS | TBCLR;
+    TB0CCTL0 = CCIE;
 }
+
+void Start_Delay(uint16_t ms) {
+    timer_done = 0;
+    uint16_t offset = (ms * 8000); // 8MHz SMCLK = 8000 ticks/ms
+    TB0CCR0 = TB0R + offset;
+}
+
 
 void Init_Timer_B3(void) {
     TB3CTL = TBSSEL__SMCLK | MC__UP | TBCLR; // SMCLK, Up Mode, clear
