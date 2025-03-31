@@ -14,3 +14,6 @@ if(UART_CheckForCommand(UART_PC)) {
     }
 }
 
+Start_ADC(ADC_IR_LEFT);
+// wait or flag in ISR sets "ready" flag
+unsigned int leftIR = adc_values[ADC_IR_LEFT];
