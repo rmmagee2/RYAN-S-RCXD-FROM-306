@@ -7,6 +7,7 @@
 #include "iot_uart.h"
 #include "defines.h"
 #include "timers.h"
+#include "lcd.h"
 
 static FSM_State current_state = STATE_IDLE;
 static FSM_State next_state = STATE_IDLE;
