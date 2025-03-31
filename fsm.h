@@ -1,4 +1,7 @@
 // fsm.h
+#include "defines.h"
+#include "timers.h"
+
 #ifndef FSM_H
 #define FSM_H
 
