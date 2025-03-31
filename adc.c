@@ -58,3 +58,36 @@ __interrupt void ADC12_ISR(void) {
       break;
   }
 }
+
+Menu_Mode Thumbwheel_GetMode(void) {
+    unsigned int val = ADC_Thumb; // global updated in ADC ISR
+    if (val < MODE_THRESHOLD_1)
+        return MODE_START;
+    else if (val < MODE_THRESHOLD_2)
+        return MODE_STOP;
+    else if (val < MODE_THRESHOLD_3)
+        return MODE_MANUAL;
+    else
+        return MODE_AUTO;
+}
+
+void Thumbwheel_Menu(void) {
+    Menu_Mode mode = Thumbwheel_GetMode();
+    switch (mode) {
+        case MODE_START:
+            Set_Next_State(STATE_FORWARD_START);
+            break;
+        case MODE_STOP:
+            Set_Next_State(STATE_INITIATE_STOP);
+            break;
+        case MODE_MANUAL:
+            // maybe toggle LED or update LCD
+            break;
+        case MODE_AUTO:
+            // enable autonomous line following
+            break;
+        default:
+            break;
+    }
+}
+
