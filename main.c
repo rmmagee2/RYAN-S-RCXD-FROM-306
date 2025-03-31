@@ -1,3 +1,13 @@
+Update_Sensors();  // Call once per loop
+
+uint8_t lineStatus = Detect_Line_Center();
+switch(lineStatus) {
+  case 3: LCD_Print("LINE", "CENTERED", "", ""); break;
+  case 1: LCD_Print("LINE", "LEFT ONLY", "", ""); break;
+  case 2: LCD_Print("LINE", "RIGHT ONLY", "", ""); break;
+  case 0: LCD_Print("LINE", "LOST!", "", ""); break;
+}
+
 unsigned int speed = Get_Thumbwheel_PWM();
 Drive_Forward(speed);
 
