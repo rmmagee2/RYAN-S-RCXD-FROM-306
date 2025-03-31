@@ -1,3 +1,12 @@
+unsigned int speed = Get_Thumbwheel_PWM();
+Drive_Forward(speed);
+
+if(Is_Black_Left() && Is_Black_Right()) {
+    LCD_Print("BLACK", "LINE", "", "");
+    Stop_Motors();
+    // do turn or adjust
+}
+
 UART_Process();
 
 if(UART_CheckForCommand(UART_IOT)) {
