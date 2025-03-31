@@ -7,6 +7,8 @@
 #include "sensors.h"
 #include "uart.h"
 #include "lcd.h"
+#include "timers.h"
+
 
 // ==================== MASTER INIT ====================
 void Init_All(void) {
