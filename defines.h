@@ -14,6 +14,7 @@
 // ================== ADC ==================
 #define ADC_MAX_VALUE   4095
 #define BLACK_THRESHOLD  500        // Calibrate this
+//#define BLACK_THRESHOLD ((white_avg + black_avg) / 2)
 
 // ================== UART ==================
 #define UART_BUFFER_SIZE     64
