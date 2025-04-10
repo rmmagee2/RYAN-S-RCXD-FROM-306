@@ -2,11 +2,11 @@
 #define DEFINES_H_
 
 // ================== CLOCK SPEEDS ==================
-#define SMCLK_FREQ     8000000     // 8 MHz
-#define ACLK_FREQ       10000      // ~10kHz VLO
+#define SMCLK_FREQ     8000000     // SMCLK = 8MHz assumed from DCO config in clocks.c
+#define ACLK_FREQ       10000      // ACLK = ~10kHz from VLO (or 32768 Hz if LFXT is used)
 
 // ================== PWM ==================
-#define PWM_PERIOD      1000       // TimerB3 CCR0 (1kHz PWM)
+#define PWM_PERIOD      1000       // TimerB3 CCR0  8 kHz PWM if SMCLK is 8MHz (Frequency = 8MHz / 1000 = 8kHz PWM, not 1kHz as commented)
 #define FULL_SPEED      1000
 #define HALF_SPEED       500
 #define OFF                0
