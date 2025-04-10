@@ -28,8 +28,11 @@ typedef enum {
   STATE_IDLE,
   STATE_WAIT_START,
   STATE_FORWARD,
+  STATE_REVERSE,
   STATE_TURN,
   STATE_LINE_DETECTED,
+  STATE_LINE_LOST,
+  STATE_CALIBRATION,
   STATE_STOPPED,
   STATE_MANUAL,
   STATE_AUTO
@@ -40,6 +43,9 @@ extern State current_state;
 // ================== EVENT ENUM (for future FSM logic) ==================
 typedef enum {
   EVENT_NONE,
+  EVENT_IR_LEFT_HIGH,
+  EVENT_IR_RIGHT_LOW,
+  EVENT_MANUAL_LEFT_TURN,
   EVENT_START_CMD,
   EVENT_STOP_CMD,
   EVENT_LINE_FOUND,
