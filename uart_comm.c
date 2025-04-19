@@ -1,6 +1,8 @@
 #include <msp430.h>
 #include <string.h>
-#include "uart.h"
+#include "uart_comm.h"
+#include "fsm.h"
+
 
 // ==================== RING BUFFERS ====================
 volatile char ringBuffer_IOT[UART_BUFFER_SIZE];
@@ -96,5 +98,23 @@ void UART_SendString(uint8_t channel, const char* str) {
       UCA1TXBUF = *str++;
     }
   }
+}
+
+// ======================= Process IOT Commands ================
+void Process_IOT_Command(void) {
+    char* cmd = UART_GetCommand(UART_IOT);
+    if (strcmp(cmd, "start") == 0) {
+        Set_Next_State(STATE_FORWARD_START);
+    } else if (strcmp(cmd, "stop") == 0) {
+        Set_Next_State(STATE_INITIATE_STOP);
+    } else if (strcmp(cmd, "auto") == 0) {
+        Set_Next_State(STATE_AUTO);  // You must define this
+    } else if (strcmp(cmd, "manual") == 0) {
+        Set_Next_State(STATE_MANUAL);  // You must define this
+    } else if (strcmp(cmd, "calibrate") == 0) {
+        Set_Next_State(STATE_CALIBRATION);
+    } else {
+        UART_SendString(UART_IOT, "Unknown command\n");
+    }
 }
 
