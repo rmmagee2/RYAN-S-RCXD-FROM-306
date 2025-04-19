@@ -3,7 +3,6 @@
 #include <stdint.h>
 
 extern volatile uint8_t timer_done;
-extern volatile uint8_t timer_event_flag = 0;
 extern volatile uint8_t timer_event_flag; // in header
 volatile uint8_t timer_event_flag = 0;    // in .c file only
 
