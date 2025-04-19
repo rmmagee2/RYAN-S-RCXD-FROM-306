@@ -2,6 +2,7 @@
 #include "sensors.h"
 
 static uint8_t adc_cycle_index = 0;
+static uint16_t dynamic_threshold = 500; // Default value
 
 void Init_Sensors(void) {
   Start_ADC(ADC_IR_LEFT);
@@ -29,11 +30,11 @@ void Update_Sensors(void) {
 }
 
 uint8_t Is_Black_Left(void) {
-  return adc_values[ADC_IR_LEFT] < BLACK_THRESHOLD;
+  return adc_values[ADC_IR_LEFT] < dynamic_threshold;
 }
 
 uint8_t Is_Black_Right(void) {
-  return adc_values[ADC_IR_RIGHT] < BLACK_THRESHOLD;
+  return adc_values[ADC_IR_RIGHT] < dynamic_threshold;
 }
 
 uint8_t Detect_Line_Center(void) {
