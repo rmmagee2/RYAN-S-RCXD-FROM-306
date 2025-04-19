@@ -24,21 +24,19 @@
 #define UART_IOT       1
 
 // ================== STATE MACHINE ENUM (for later) ==================
+// defines.h (Add if unifying FSM states)
 typedef enum {
   STATE_IDLE,
-  STATE_WAIT_START,
-  STATE_FORWARD,
-  STATE_REVERSE,
-  STATE_TURN,
-  STATE_LINE_DETECTED,
-  STATE_LINE_LOST,
-  STATE_CALIBRATION,
-  STATE_STOPPED,
-  STATE_MANUAL,
-  STATE_AUTO
-} State;
-
-extern State current_state;
+  STATE_THUMBWHEEL_MENU,
+  STATE_CONFIGURE_WHEELS,
+  STATE_FORWARD_START,
+  STATE_FORWARD_ADJUST,
+  STATE_REVERSE_START,
+  STATE_REVERSE_ADJUST,
+  STATE_INITIATE_STOP,
+  STATE_STOP,
+  STATE_PROCESS_COMMAND
+} FSM_State;
 
 // ================== EVENT ENUM (for future FSM logic) ==================
 typedef enum {
