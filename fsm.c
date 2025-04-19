@@ -72,3 +72,7 @@ void FSM_Process(void) {
     }
 }
 
+FSM_State Get_Current_State(void) {
+    return current_state;
+}
+
