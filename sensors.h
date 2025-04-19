@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-#define BLACK_THRESHOLD    500  // Tune this value during calibration
+//#define BLACK_THRESHOLD    500  // Tune this value during calibration
 
 void Init_Sensors(void);
 void Update_Sensors(void);
