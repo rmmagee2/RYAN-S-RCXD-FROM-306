@@ -29,7 +29,11 @@ void FSM_Process(void) {
     switch (current_state) {
         case STATE_IDLE:
             break;
-
+        
+        case STATE_CALIBRATION:
+            Calibrate_IR_Sensors();
+            break; 
+        
         case STATE_THUMBWHEEL_MENU:
             // process potentiometer values for menu selection
             Thumbwheel_Menu();
