@@ -72,3 +72,29 @@ uint8_t UART_CheckForCommand(uint8_t channel) {
   if(channel == UART_PC) return newCommand_PC;
   if(channel == UART_IOT) return newCommand_IOT;
 
+// ==================== Get Command ========================== 
+char* UART_GetCommand(uint8_t channel) {
+  if(channel == UART_PC) {
+    newCommand_PC = 0;
+    return processBuffer_PC;
+  }
+  if(channel == UART_IOT) {
+    newCommand_IOT = 0;
+    return processBuffer_IOT;
+  }
+  return NULL;
+}
+
+// ===================== SendSting ============================ 
+void UART_SendString(uint8_t channel, const char* str) {
+  while (*str != '\0') {
+    if (channel == UART_PC) {
+      while (!(UCA0IFG & UCTXIFG));
+      UCA0TXBUF = *str++;
+    } else if (channel == UART_IOT) {
+      while (!(UCA1IFG & UCTXIFG));
+      UCA1TXBUF = *str++;
+    }
+  }
+}
+
