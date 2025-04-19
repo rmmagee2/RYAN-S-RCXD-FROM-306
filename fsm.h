@@ -22,6 +22,7 @@ typedef enum {
 void FSM_Init(void);
 void FSM_Process(void);
 void Set_Next_State(FSM_State new_state);
+FSM_State Get_Current_State(void);
 
 #endif
 
