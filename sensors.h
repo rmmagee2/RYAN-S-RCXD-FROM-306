@@ -7,6 +7,7 @@
 
 void Init_Sensors(void);
 void Update_Sensors(void);
+void Calibrate_IR_Sensors(void);
 
 uint8_t Is_Black_Left(void);
 uint8_t Is_Black_Right(void);
