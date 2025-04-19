@@ -22,18 +22,19 @@ __interrupt void TIMER0_B1_ISR(void) {
   }
 }
 
-#pragma vector=USCI_A0_VECTOR
+#pragma vector=EUSCI_A0_VECTOR
 __interrupt void USCI_A0_ISR(void) {
-  if(UCA0IFG & UCRXIFG) {
+  if (UCA0IFG & UCRXIFG) {
     ringBuffer_PC[wr_PC++] = UCA0RXBUF;
     wr_PC %= UART_BUFFER_SIZE;
   }
 }
 
-#pragma vector=USCI_A1_VECTOR
+#pragma vector=EUSCI_A1_VECTOR
 __interrupt void USCI_A1_ISR(void) {
-  if(UCA1IFG & UCRXIFG) {
+  if (UCA1IFG & UCRXIFG) {
     ringBuffer_IOT[wr_IOT++] = UCA1RXBUF;
     wr_IOT %= UART_BUFFER_SIZE;
   }
 }
+
