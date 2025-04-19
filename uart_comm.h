@@ -14,5 +14,6 @@ void UART_Process(void);
 uint8_t UART_CheckForCommand(uint8_t channel);
 char* UART_GetCommand(uint8_t channel);
 void UART_SendString(uint8_t channel, const char* str);
+void Process_IOT_Command(void);
 
 #endif // UART_H_
