@@ -1,31 +1,27 @@
 #include <msp430.h>
 #include "init.h"
 #include "ports.h"
-#include "timers.h"
-#include "adc.h"
-#include "motors.h"
-#include "sensors.h"
-#include "uart.h"
 #include "lcd.h"
+#include "uart_comm.h"
+#include "adc.h"
+#include "sensors.h"
 #include "timers.h"
+#include "motors.h"
+#include "fsm.h"
 
-
-// ==================== MASTER INIT ====================
 void Init_All(void) {
-  WDTCTL = WDTPW | WDTHOLD;  // Disable Watchdog
+    WDTCTL = WDTPW | WDTHOLD;    // Stop watchdog timer
 
-  Init_Ports();              // GPIO directions & defaults
-  Init_Clocks();             // 8MHz SMCLK + VLO ACLK
-  Init_Timer_B0();           // Continuous mode timer for delays, FSM, ADC timing
-  Init_Timer_B3();           // Motor PWM (TB3.1–4)
+    Init_Ports();
+    Init_Clocks();
+    Init_Timer_B0();
+    Init_Timer_B3();
+    Init_LCD();
+    Init_UART();
+    Init_ADC();
+    Init_Sensors();
+    Init_Motors();
+    FSM_Init();
 
-  Init_UART();               // UART0 for PC, UART1 for IOT
-  Init_ADC();                // ADC config only
-  Init_Sensors();            // Optional pre-filling ADC readings
-  Init_Motors();             // PWM config + motor safety
-
-  Init_LCD();                // SPI + LCD control pins
-
-  __enable_interrupt();      // Global interrupt enable
+    __enable_interrupt();        // Global interrupt enable
 }
-
