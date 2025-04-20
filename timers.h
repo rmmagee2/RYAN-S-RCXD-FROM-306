@@ -4,7 +4,6 @@
 
 extern volatile uint8_t timer_done;
 extern volatile uint8_t timer_event_flag; // in header
-volatile uint8_t timer_event_flag = 0;    // in .c file only
 
 void Start_Delay(uint16_t ms);  // millisecond timer trigger
 
