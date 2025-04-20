@@ -2,6 +2,7 @@
 #include "timers.h"
 
 volatile uint8_t timer_done = 0;
+volatile uint8_t timer_event_flag = 0;
 
 void Init_Timer_B0(void) {
     TB0CTL = TBSSEL__SMCLK | MC__CONTINUOUS | TBCLR;
