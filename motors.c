@@ -86,7 +86,7 @@ void Adjust_Reverse(void) {
   TB3CCR3 = OFF;
 }
 
-// FSM: Begin stop sequence — PWM off, delay if needed
+// FSM: Begin stop sequence â€” PWM off, delay if needed
 void Stop_Movement_Init(void) {
   TB3CCR1 = OFF;
   TB3CCR2 = OFF;
