@@ -1,66 +1,66 @@
-#include <msp430.h>
-#include "adc.h"
+#include <msp430fr2355.h>
+#include "defines.h"
+#include "fsm.h"
+#include <stdint.h>
 
 volatile unsigned int adc_values[3] = {0, 0, 0};  // L, R, Thumb
 
 void Init_ADC(void) {
-  // Turn on ADC12_B, set sampling time, and use SMCLK
-  ADC12CTL0 = ADC12SHT0_2 | ADC12ON;
-  ADC12CTL1 = ADC12SHP;             // Use sampling timer
-  ADC12CTL2 = ADC12RES_2;           // 12-bit resolution
-  ADC12IER0 = ADC12IE0;             // Enable interrupt for MEM0
-  ADC12CTL0 &= ~ADC12ENC;           // Disable ADC while configuring
+    ADCCTL0 &= ~ADCENC;  // Disable ADC before configuring
 
-  // Input pins were configured in ports.c (SEL0/SEL1 for A2/A3/A5)
-  // A2 = P1.2 (IR Left), A3 = P1.3 (IR Right), A5 = P1.5 (Thumb)
+    ADCCTL0 = ADCSHT_2 | ADCON;      // Sample & hold time = 16 ADC clocks, turn on ADC
+    ADCCTL1 = ADCSHP;                // Sampling timer
+    ADCCTL2 = ADCRES_2;              // 12-bit conversion results
+    ADCIE = ADCIE0;                  // Enable ADCMEM0 interrupt
+
+    // Inputs A2, A3, A5 selected in ports.c (SEL0/SEL1)
+
+    ADCCTL0 |= ADCENC;              // Enable ADC
 }
 
-// Start ADC conversion for specific channel
 void Start_ADC(uint8_t channel) {
-  ADC12CTL0 &= ~ADC12ENC;  // Disable before changing settings
+    ADCCTL0 &= ~ADCENC;  // Disable ADC before reconfig
 
-  switch(channel) {
-    case ADC_IR_LEFT:
-      ADC12MCTL0 = ADC12INCH_2; // A2
-      break;
-    case ADC_IR_RIGHT:
-      ADC12MCTL0 = ADC12INCH_3; // A3
-      break;
-    case ADC_THUMB:
-      ADC12MCTL0 = ADC12INCH_5; // A5
-      break;
-    default:
-      return;
-  }
+    switch(channel) {
+        case ADC_IR_LEFT:
+            ADCMCTL0 = ADCINCH_2;  // A2
+            break;
+        case ADC_IR_RIGHT:
+            ADCMCTL0 = ADCINCH_3;  // A3
+            break;
+        case ADC_THUMB:
+            ADCMCTL0 = ADCINCH_5;  // A5
+            break;
+        default:
+            return;
+    }
 
-  ADC12CTL0 |= ADC12ENC | ADC12SC; // Enable and start conversion
+    ADCCTL0 |= ADCENC | ADCSC;  // Enable and start conversion
 }
 
-// ISR to read ADC result
-#pragma vector = ADC12_B_VECTOR
-__interrupt void ADC12_ISR(void) {
-  switch(__even_in_range(ADC12IV, ADC12IV_ADC12RDYIFG)) {
-    case ADC12IV_ADC12IFG0:
-      // Figure out which input was last used based on MCTL0
-      switch(ADC12MCTL0 & ADC12INCH_15) {
-        case ADC12INCH_2:
-          adc_values[ADC_IR_LEFT] = ADC12MEM0;
-          break;
-        case ADC12INCH_3:
-          adc_values[ADC_IR_RIGHT] = ADC12MEM0;
-          break;
-        case ADC12INCH_5:
-          adc_values[ADC_THUMB] = ADC12MEM0;
-          break;
-      }
-      break;
-    default:
-      break;
-  }
+#pragma vector=ADC_VECTOR
+__interrupt void ADC_ISR(void) {
+    switch(__even_in_range(ADCIV, ADCIV__ADCIFG0)) {
+        case ADCIV__ADCIFG0:
+            switch (ADCMCTL0 & 0x0F) {  // Mask to get channel number
+                case ADCINCH_2:
+                    adc_values[ADC_IR_LEFT] = ADCMEM0;
+                    break;
+                case ADCINCH_3:
+                    adc_values[ADC_IR_RIGHT] = ADCMEM0;
+                    break;
+                case ADCINCH_5:
+                    adc_values[ADC_THUMB] = ADCMEM0;
+                    break;
+            }
+            break;
+        default:
+            break;
+    }
 }
 
 Menu_Mode Thumbwheel_GetMode(void) {
-    unsigned int val = ADC_Thumb; // global updated in ADC ISR
+    unsigned int val = adc_values[ADC_THUMB];  // Use stored value
     if (val < MODE_THRESHOLD_1)
         return MODE_START;
     else if (val < MODE_THRESHOLD_2)
@@ -81,10 +81,10 @@ void Thumbwheel_Menu(void) {
             Set_Next_State(STATE_INITIATE_STOP);
             break;
         case MODE_MANUAL:
-            // maybe toggle LED or update LCD
+            // Toggle LED or do something manual
             break;
         case MODE_AUTO:
-            // enable autonomous line following
+            // Start autonomous mode
             break;
         default:
             break;
