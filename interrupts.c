@@ -1,7 +1,7 @@
 #include "msp430.h"
-#include "macros.h"
 #include "interrupts.h"
 #include "timers.h"
+#include "uart_comm.h"
 
 #pragma vector = TIMER0_B0_VECTOR
 __interrupt void Timer0_B0_ISR(void) {
@@ -10,7 +10,7 @@ __interrupt void Timer0_B0_ISR(void) {
 }
 
 
-// TimerB0 CCR1–CCR2 + overflow ISR
+// TimerB0 CCR1â€“CCR2 + overflow ISR
 #pragma vector = TIMER0_B1_VECTOR
 __interrupt void TIMER0_B1_ISR(void) {
   switch(__even_in_range(TB0IV,14)) {
@@ -37,4 +37,3 @@ __interrupt void USCI_A1_ISR(void) {
     wr_IOT %= UART_BUFFER_SIZE;
   }
 }
-
