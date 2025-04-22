@@ -34,8 +34,11 @@ typedef enum {
   STATE_REVERSE_START,
   STATE_REVERSE_ADJUST,
   STATE_INITIATE_STOP,
+  STATE_CALIBRATION,
   STATE_STOP,
-  STATE_PROCESS_COMMAND
+  STATE_PROCESS_COMMAND,
+  STATE_AUTO,
+  STATE_MANUAL
 } FSM_State;
 
 // ================== EVENT ENUM (for future FSM logic) ==================
@@ -54,5 +57,23 @@ typedef enum {
 
 extern Event current_event;
 
+// ==================== MENU THUMB WHEEL ENUM ANd dEfiNES =================
+#define ADC_IR_LEFT  0
+#define ADC_IR_RIGHT 1
+#define ADC_THUMB    2
+
+#define MODE_THRESHOLD_1 1000
+#define MODE_THRESHOLD_2 2000
+#define MODE_THRESHOLD_3 3000
+
+typedef enum {
+    MODE_START,
+    MODE_STOP,
+    MODE_MANUAL,
+    MODE_AUTO
+} Menu_Mode;
+
+extern Menu_Mode Thumbwheel_GetMode(void);
 #endif // DEFINES_H_
+
 
