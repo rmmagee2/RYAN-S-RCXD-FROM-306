@@ -4,7 +4,7 @@
 #include "adc.h"
 #include "lcd.h"
 #include "sensors.h"
-#include "iot_uart.h"
+#include "uart_comm.h"
 #include "defines.h"
 #include "timers.h"
 #include "lcd.h"
@@ -79,4 +79,3 @@ void FSM_Process(void) {
 FSM_State Get_Current_State(void) {
     return current_state;
 }
-
