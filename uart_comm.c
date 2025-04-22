@@ -1,5 +1,6 @@
 #include <msp430.h>
 #include <string.h>
+#include <stdint.h>
 #include "uart_comm.h"
 #include "fsm.h"
 
@@ -19,6 +20,10 @@ uint8_t newCommand_PC = 0;
 
 // ==================== INIT ====================
 void Init_UART(void) {
+  P3OUT &= ~BIT7; // Pull IOT_EN low
+  __delay_cycles(800000); // ~100ms at 8MHz
+  P3OUT |= BIT7;  // Release reset
+
   // ==== UCA0 (PC UART via USB) ====
   UCA0CTLW0 = UCSWRST;
   UCA0CTLW0 |= UCSSEL__SMCLK;
@@ -73,6 +78,9 @@ void UART_Process(void) {
 uint8_t UART_CheckForCommand(uint8_t channel) {
   if(channel == UART_PC) return newCommand_PC;
   if(channel == UART_IOT) return newCommand_IOT;
+  return 0; // default fallback
+}
+
 
 // ==================== Get Command ========================== 
 char* UART_GetCommand(uint8_t channel) {
@@ -117,4 +125,3 @@ void Process_IOT_Command(void) {
         UART_SendString(UART_IOT, "Unknown command\n");
     }
 }
-
