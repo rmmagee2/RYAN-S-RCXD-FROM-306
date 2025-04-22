@@ -2,10 +2,11 @@
 #include <string.h>
 #include "lcd.h"
 #include "ports.h"
+#include <stdint.h>
 
 static void SPI_send(char byte);
 static void LCD_command(char cmd);
-static void LCD_data(char data);
+//static void LCD_data(char data);
 
 // ASCII to position logic could live here later
 
@@ -52,38 +53,26 @@ static void LCD_command(char cmd) {
 }
 
 // Send LCD data byte (ASCII char)
-static void LCD_data(char data) {
-  P4OUT &= ~LCD_CS;
-  SPI_send(data);
-  P4OUT |= LCD_CS;
-}
+//static void LCD_data(char data) {
+//  P4OUT &= ~LCD_CS;
+//  SPI_send(data);
+//  P4OUT |= LCD_CS;
+//}
 
 void LCD_Clear(void) {
   LCD_command(0x01); // Clear display
   __delay_cycles(3000);
 }
 
-void LCD_Print(char* line1, char* line2, char* line3, char* line4) {
-  LCD_Clear();
+void LCD_Char(char c);  // Declare it
+void LCD_Print(const char* str) {
+    uint8_t i;
+    uint8_t len = strlen(str);  // ✅ precompute string length
 
-  LCD_command(0x80); // Line 1
-  for (int i = 0; i < strlen(line1); i++) {
-    LCD_data(line1[i]);
-  }
+    for (i = 0; i < len; i++) {
+        // Wait until LCD is ready to accept a new char (optional based on interface)
+        // while (!(UCB1IFG & UCTXIFG)); // <- uncomment if you're using I2C with polling
 
-  LCD_command(0x90); // Line 2
-  for (int i = 0; i < strlen(line2); i++) {
-    LCD_data(line2[i]);
-  }
-
-  LCD_command(0xA0); // Line 3
-  for (int i = 0; i < strlen(line3); i++) {
-    LCD_data(line3[i]);
-  }
-
-  LCD_command(0xB0); // Line 4
-  for (int i = 0; i < strlen(line4); i++) {
-    LCD_data(line4[i]);
-  }
+        LCD_Char(str[i]);  // ✅ Send one char at a time
+    }
 }
-
