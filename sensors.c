@@ -1,5 +1,6 @@
 #include "adc.h"
 #include "sensors.h"
+#include <stdint.h>
 
 static uint8_t adc_cycle_index = 0;
 static uint16_t dynamic_threshold = 500; // Default value
@@ -49,14 +50,15 @@ uint8_t Detect_Line_Center(void) {
 
 uint16_t Get_Thumbwheel_PWM(void) {
   uint16_t val = adc_values[ADC_THUMB]; // 12-bit max is 4095
-  return (val * 1000) / 4095;           // Scale to 0–1000
+  return (val * 1000) / 4095;           // Scale to 0â€“1000
 }
 
 void Calibrate_IR_Sensors(void) {
     uint32_t left_sum = 0, right_sum = 0;
     const uint8_t samples = 10;
+    uint8_t i;
 
-    for (uint8_t i = 0; i < samples; i++) {
+    for (i = 0; i < samples; i++) {
         Start_ADC(ADC_IR_LEFT);
         __delay_cycles(1000);
         left_sum += adc_values[ADC_IR_LEFT];
@@ -75,4 +77,3 @@ void Calibrate_IR_Sensors(void) {
     // Set dynamic threshold with an offset
     dynamic_threshold = ambient_average - 100; // Adjust offset as needed
 }
-
