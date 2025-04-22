@@ -24,4 +24,5 @@ void Init_All(void) {
     FSM_Init();
 
     __enable_interrupt();        // Global interrupt enable
+    PM5CTL0 &= ~LOCKLPM5;
 }
