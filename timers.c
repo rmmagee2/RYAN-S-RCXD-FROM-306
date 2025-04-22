@@ -21,19 +21,19 @@ void Init_Timer_B3(void) {
 
     TB3CCR0 = 1000;      // PWM period = 1kHz at 8MHz
 
-    // RIGHT FWD – TB3.1
+    // RIGHT FWD â€“ TB3.1
     TB3CCTL1 = OUTMOD_7; // Reset/Set
     TB3CCR1 = 0;         // Initial duty cycle = 0%
 
-    // RIGHT REV – TB3.2
+    // RIGHT REV â€“ TB3.2
     TB3CCTL2 = OUTMOD_7;
     TB3CCR2 = 0;
 
-    // LEFT FWD – TB3.3
+    // LEFT FWD â€“ TB3.3
     TB3CCTL3 = OUTMOD_7;
     TB3CCR3 = 0;
 
-    // LEFT REV – TB3.4
+    // LEFT REV â€“ TB3.4
     TB3CCTL4 = OUTMOD_7;
     TB3CCR4 = 0;
 }
