@@ -44,6 +44,12 @@ void Init_Ports(void) {
     P4SEL0 |= UART1_TX | UART1_RX | LCD_CLK | LCD_SIMO | LCD_SOMI;
     P4SEL1 &= ~(UART1_TX | UART1_RX | LCD_CLK | LCD_SIMO | LCD_SOMI);
 
+    // Set all unused ports to output low to reduce leakage
+    P5OUT = 0; P5DIR = 0xFF;
+    PAOUT = 0; PADIR = 0xFF;
+    PBOUT = 0; PBDIR = 0xFF;
+    PCOUT = 0; PCDIR = 0xFF;
+
     // --- PORT 6 ---
     P6OUT |= LCD_BACKLIGHT;
     P6DIR |= LCD_BACKLIGHT;
